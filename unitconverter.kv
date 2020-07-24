@@ -1,0 +1,65 @@
+#:kivy 1.10.0
+#: import Factory kivy.factory.Factory
+
+UnitConverterRoot:
+	orientation: 'vertical'
+
+<UnitConverterRoot>:
+	user_input_form: user_input_form
+	result_list: result_list
+	UserInputForm:
+		id: user_input_form
+
+	ResultList:
+		id: result_list
+		viewclass: 'ResultItemLabel'
+		data: [{'text': '0 m'}, {'text': '0 km'}, {'text': '0 cm'}, {'text': '0 mm'}, {'text': '0 mile'}, {'text': '0 yd'}, {'text': '0 ft'}, {'text': '0 in'}, {'text': '0 nmi'}, {'text': '0 league'}]
+		RecycleBoxLayout:
+			default_size: None, dp(56)
+			default_size_hint: 1, None
+			size_hint_y: None
+			height: self.minimum_height
+			orientation: 'vertical'
+
+	KeyPad:
+
+<UserInputForm>:
+	height: "40dp"
+	size_hint_y: None
+	input_box: input_box
+	unit_menu: unit_menu
+	metric_menu: metric_menu
+	TextInput:
+		id: input_box
+		size_hint_x: 40
+		disabled: True
+		font_size: '25dp'
+		on_text: app.root.calculate()
+	Spinner:
+		id: unit_menu
+		text: 'Meter (m)'
+		values: ('Meter (m)', 'Kilometer (km)', 'Decimeter (dm)', 'Centimeter (cm)', 'Milimeter (mm)', 'Mile (mile)', 'Yard (yd)', 'Feet (ft)', 'Inch (in)', 'Nautical Mile (nmi)', 'League (league)')
+		size_hint_x: 40
+		font_size: '14dp'
+		markup: True
+		option_cls: Factory.get("UnitMenuOptions")
+		on_text: root.change_unit()
+	Spinner:
+		id: metric_menu
+		text: 'Length'
+		values: ('Length', 'Area', 'Volume', 'Temparature', 'Weight', 'Pressure', 'Speed', 'Time')#, 'Compass', 'Base', 'Bytes')
+		size_hint_x: 20
+		font_size: '14dp'
+		on_text: root.select_metric(self)
+
+<UnitMenuOptions@SpinnerOption>:
+	markup: True
+	font_size: '14dp'
+
+<ResultItemLabel@Label>:
+	text_size: self.size
+	font_size: '20dp'
+	halign: 'right'
+	valign: 'middle'
+	padding: (root.width * 0.02, 0)
+	markup: True
